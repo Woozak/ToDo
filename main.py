@@ -3,21 +3,21 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-@app.post('/create/')
-async def create_task():
+@app.post("/create/")
+def create_task():
     pass
 
 
-@app.get('/get/')
-async def get_task():
+@app.get("/get/")
+def get_task():
     pass
 
 
-@app.post('/update/')
-async def update_task():
+@app.post("/update/")
+def update_task():
     pass
 
 
-@app.post('delete')
-async def delete_task():
+@app.get("/delete/{task_id}")
+def delete_task():
     pass
