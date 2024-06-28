@@ -10,9 +10,13 @@ class TaskCreate(TaskBase):
     pass
 
 
+class TaskUpdate(TaskBase):
+    completed: bool = False
+
+
 class Task(TaskBase):
     id: int
     completed: bool = False
 
     class Config:
-        orm_mode = True
+        from_attributes = True
