@@ -1,8 +1,18 @@
 from pydantic import BaseModel
 
 
-class Task(BaseModel):
-    id: int
+class TaskBase(BaseModel):
     title: str
-    description: str | None
+    description: str | None = None
+
+
+class TaskCreate(TaskBase):
+    pass
+
+
+class Task(TaskBase):
+    id: int
     completed: bool = False
+
+    class Config:
+        orm_mode = True
