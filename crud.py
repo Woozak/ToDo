@@ -1,10 +1,15 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+
 from models import Tasks
 from schemas import Task, TaskCreate, TaskUpdate
 
 
 def get_task(db: Session, task_id: int):
-    return db.query(Tasks).filter(Tasks.id == task_id).first()
+    db_task = db.query(Tasks).filter(Tasks.id == task_id).first()
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_task
 
 
 def get_tasks(db: Session, skip: int = 0, limit: int = 20):
@@ -13,6 +18,8 @@ def get_tasks(db: Session, skip: int = 0, limit: int = 20):
 
 def create_task(db: Session, task: TaskCreate):
     db_task = Tasks(title=task.title, description=task.description)
+    if not db_task.title:
+        raise HTTPException(status_code=400, detail="The 'title' field is required and cannot be empty")
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
@@ -21,7 +28,11 @@ def create_task(db: Session, task: TaskCreate):
 
 def update_task(db: Session, task_id: int, task: TaskUpdate):
     db_task = db.query(Tasks).get(task_id)
+    if not db_task:
+        raise HTTPException(status_code=404, detail="Item not found")
     db_task.title = task.title
+    if not db_task.title:
+        raise HTTPException(status_code=400, detail="The 'title' field is required and cannot be empty")
     db_task.description = task.description
     db_task.completed = task.completed
     db.commit()
