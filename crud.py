@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from models import Tasks
-from schemas import Task, TaskCreate, TaskUpdate
+from schemas import TaskCreate, TaskUpdate
 
 
 def get_task(db: Session, task_id: int):
